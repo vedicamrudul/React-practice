@@ -1,24 +1,36 @@
 import React from 'react'
-import { Trash, Heart } from 'lucide-react'
+import { Trash, Heart} from 'lucide-react'
+import {Link} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
-import { plusItem,minusItem } from '../slice/CartSlice';
+import { plusItem,minusItem, removeFromCart } from '../slice/CartSlice';
+import { useState, useEffect } from 'react';
 
 
 function DisplayCart() {
     const dispatch=useDispatch();
-    
+
+
+    const [total, setTotal]=useState(0)
 
     const products = useSelector((state)=> state.cart.cart)
     
+    useEffect(() => {
+      let totalValue = 0;
+      for (const item of products) {
+        totalValue += item.quantity * item.price;
+      }
+      console.log(totalValue)
+      setTotal(totalValue);
+    }, [products]);
     // const products=products1.cart;
-   
+  
+
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col space-y-4  p-6 px-2 h-[97vh] sm:p-10 sm:px-2">
       <h2 className="text-3xl font-bold">Your cart</h2>
       <p className="mt-3 text-sm font-medium text-gray-700">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum eius repellat ipsam, sit
-        praesentium incidunt.
+        Manage your cart here. We charge Rs.50 for cash on delivery mode of payment. Use UPI to access discounts.
       </p>
       <ul className="flex flex-col divide-y divide-gray-200">
         {products.map((product) => (
@@ -41,12 +53,12 @@ function DisplayCart() {
                   </div>
                 </div>
                 <div className="flex divide-x text-sm">
-                  <button type="button" className="flex items-center space-x-2 px-2 py-1 pl-0">
-                    <Trash size={16} />
+                  <button onClick={()=> dispatch(removeFromCart({id: product.id}))} type="button" className="flex items-center space-x-2 px-2 py-1 pl-0">
+                    <Trash  size={16} />
                     <span>Remove</span>
                   </button>
                   <button type="button" className="flex items-center space-x-2 px-2 py-1">
-                    <span><button className='mx-3 text-[1.4rem]' onClick={() => dispatch(plusItem(product.id))}>+</button><span className='text-[1.05rem]'>{product.quantity}</span><button onClick={() => dispatch(minusItem(product.id))} className='mx-3 text-[1.4rem]'>-</button></span>
+                    <span><button className='mx-3 text-[1.4rem]' onClick={() => dispatch(plusItem({id: product.id}))}>+</button><span className='text-[1.05rem]'>{product.quantity}</span><button onClick={() => dispatch(minusItem({id: product.id}))} className='mx-3 text-[1.4rem]'>-</button></span>
                     
                   </button>
                   
@@ -63,7 +75,7 @@ function DisplayCart() {
       <div className="space-y-1 text-right">
         <p>
           Total amount:
-          <span className="font-semibold"> ₹48,967</span>
+          <span className="font-semibold"> ₹{total}</span>
         </p>
       </div>
       <div className="flex justify-end space-x-4">
@@ -71,7 +83,8 @@ function DisplayCart() {
           type="button"
           className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
         >
-          Back to shop
+          <Link to="/Home">     Back to shop</Link>
+     
         </button>
         <button
           type="button"

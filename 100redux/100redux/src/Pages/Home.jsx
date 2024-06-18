@@ -2,19 +2,23 @@ import React from 'react'
 import { ShoppingCart } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux'
 import { plusAmt, minusAmt } from '../slice/ProductSlice';
+import { addToCart } from '../slice/CartSlice';
 
 function Home() {
     const dispatch = useDispatch();
     const products = useSelector((state) => state.products.products)
 
 
-    console.log(products)
-    return (
 
+   
+
+    // console.log(products)
+    return (
 
         <div>
 
             <div className='flex flex-wrap mx-24' >
+      
 
                 {products.map((product) =>
 
@@ -33,9 +37,10 @@ function Home() {
                          <button onClick={() => dispatch(minusAmt({id: product.id}))}className='text-[1.6rem] 
                         mr-4'>-</button>
 
-{console.log(`${product.id} and ${product.name}`)}
+
                             <span className='bg-black h-7 w-[0.9px]  '></span>
-                            Add to Cart <ShoppingCart className='bg-white' /></span>
+                            <button onClick={()=> dispatch(addToCart({id: product.id, name:product.name, url: product.url, desc: product.desc, price:product.price, quantity: product.amt}))} className='flex bg-white '>
+                            Add to Cart <ShoppingCart className='bg-white pl-2' /></button></span>
 
                     </div>
                 )}
