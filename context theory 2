@@ -1,0 +1,7 @@
+just some random tailwind class.
+
+=> sr-only : Use sr-only to hide an element visually without hiding it from screen readers
+basically it hides the element from the user. Its there but its not visible i think.
+
+=> peer: i really dont know what this means. But it adds some sort of animation i guess. Ui is not my forte.
+

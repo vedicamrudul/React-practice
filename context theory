@@ -1,0 +1,15 @@
+So i will explain the first part of useContext (the login form mini project here).
+
+See this is going to be my explanation from what i have understood so it might not necessarily be right.
+
+so like if we want to take input from same place and then display that information inside some component that is the sub sub sub child or something of the component where we got that information then we will have to pass it down as prop in each of the child component to reach the sub sub sub child. Basically its a waste because the other child components are not using that prop. 
+
+so we create a context, which is like a global variable. You can store functions, arrays, objects whatever you want in it. And then any file or component can access it (that is within the contextprovider tag).
+
+1. First we create a folder called Context (in which we can store multiple contexts). We will make multiple contexts (global variables) in which we will store related things. Like one global variable for login details and whatever. Because different components use different variables and whenever we update any variable in a context, every variable gets re-rendered. So basically dont put a lot of things together in a context and dont use context for things that re-render very often cuz then every single variable in that context will get re-rendered which is not optimal at all.
+
+2. Anyways, then create a file with your context_name.js, here we made UserContext.js (which stores the info of the user). Import createContext() from react and create a coontext context_name (UserContext in out case) with a null object preferrably (you can put values there also). Export this.
+
+3. Now, create another file in the same context folder context_name_provider.jsx
+In our case it is UserContextProvider.jsx
+In that you create a variable that you want to use globally and pass its value in UserContext.provider. 

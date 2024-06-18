@@ -1,0 +1,66 @@
+=> Sabse Pehele we create a store. Create a folder 'app' in src (or wherever you want actually) and then create a file 'store.js' in it. Then inside that file we import '{configureStore}' from redux toolkit and then we export that- 'export const store = configureStore({})' ~~ configureStore takes an object as its argument (the object basically contains all the reducers that you create, so that the store has its awareness)
+
+=> In redux 'toolkit' we have a special naming convention for reducers- 'slice'. We now go to our second step and create reducers. For that we create a new folder that we can call 'features' within src folder. Inside that We can create seperate folders for seperate parts of the app. Like for creating a todo, we create a folder 'todo' inside 'features' and then create a file within this folder again called 'TodoSlice.js' (you can use any name this is just the common naming convention)
+
+=> within the 'TodoSlice.js' folder, we import {createSlice and nanoid} (nanoid is provided by redux only and it generates unique ids for keys).
+After importing this, we declare the initial state of our global variable or whatever it is.
+
+const initialState={
+    todos: [{id: 1, text: "hello world" }]
+}
+
+You can make it an array or object also. You can declare this initial state outside your Slice also. Slice is nothing but a bigger version of reducer. 
+
+=> we create a slice now - 
+
+export const todoSlice = createSlice({
+    name: 'todo',
+    initialState,   // you can initialise your initialState here also instead of in step 2
+    reducers:{
+        // isme aayengi properties and functions
+        addTodo=(state, action)=>{
+            // see ab add todo karne ke liye humko todo toh chahiye hoga na joh naya add karna hai. Toh woh kaha se aayega? Action se. Cuz hum parameters mei woh todo pass karenge jaha par bhi input field hai waha se. And here we will show ki uska structure kaisa hoga and humko kya kya chahiy usme.
+
+            const todo={
+                id: nanoid(), // pehele we were using Date.now() but now we use nanoid here cuz better.
+                text: action.payload 
+                // (payload mei sab kuch aa sakte hai it is an object itself like it can have the text of the todo, id of the todo, whatever we pass from the action)
+            },
+            state.todos.push(todo)
+        },
+        removeTodo=()={}
+        //ab aage ka actual app se dekho
+    }
+ 
+})
+
+addTodo is a property and then we define its function
+We always get access of two things in every fucntion=> state and action.
+State is the current state of our global variable. Action are the parameters we pass like the id or sm.
+
+
+=> now we have to export the reducers (in two seperate parts) 
+export const {addTodo, removeTodo} = todoSlice.actions
+export default todoSlice.reducer
+
+
+=> now give this knowlegde of reducers to your store. It will be called todoReducer (somehow automatically)
+ export const store= configureStore({
+    reducers: todoReducer
+ })
+
+ => now we come to actually using these reducers. So now go to wherever you want to use a reducer like in the input field where you actually write the new todo and add it. We have named this 'AddTodo.jsx' within the components folder in src. So now here we will firstly use useState to intialise [input, setinput]=useState(""). Then on submit of the form we call a method handleSubmit or smthing within which we use the useDispatch hook which is provided by react. 
+
+    useDispatch hook IS USED TO USE REDUCERS (LIKE addTodo, removeTodo) TO MAKE CHANGES TO THE STORE. 
+
+const dispatch = useDispatch()
+disptach(addTodo(input))
+
+=> ab useSelector pe aate hai.
+so we use useSelector hook jab humko store se koi cheez ki value chahiye. useDispatch is used to update value but useSelector is used to obtain any value. So wherever we want to display some value from the store. 
+
+const todos= useSelector((store)=> store.todos)   
+// it is a method that has gives us access of store and then we can return whatever we want from the store in this case its the array of objects todos which contains all todo. 
+
+=> now we have to wrap all elements within a provider 
+import provider in main.jsx and then wrap the <App/> with it then we import store and give the store={store} (cuz the name of our store is store only) like in contextapi we used to give value={xyz} here we give store={xyz} within the provider tag.
